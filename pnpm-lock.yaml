@@ -38,8 +38,8 @@ devDependencies:
     specifier: ^9.1.7
     version: 9.1.7
   lavy:
-    specifier: ^2.0.2
-    version: 2.0.2(eslint@9.39.1)(stylelint@16.25.0)
+    specifier: ^2.0.3
+    version: 2.0.3(eslint@9.39.1)(stylelint@16.25.0)
   lint-staged:
     specifier: ^15.5.2
     version: 15.5.2
@@ -47,8 +47,8 @@ devDependencies:
     specifier: ^3.6.2
     version: 3.6.2
   swiftlet:
-    specifier: 1.0.0-Alpha.4
-    version: 1.0.0-Alpha.4(typescript@5.9.3)
+    specifier: ^1.1.0
+    version: 1.1.0(typescript@5.9.3)
   tsx:
     specifier: ^4.20.6
     version: 4.20.6
@@ -4696,6 +4696,14 @@ packages:
       '@pkgjs/parseargs': 0.11.0
     dev: true
 
+  /jiti@1.21.7:
+    resolution:
+      {
+        integrity: sha512-/imKNG4EbWNrVjoNC/1H5/9GFy+tqjGBHCaSsN+P2RnPqjsLmv6UD3Ej+Kj8nBWaRAwyk7kK5ZUc+OEatnTR3A==,
+      }
+    hasBin: true
+    dev: true
+
   /js-tokens@4.0.0:
     resolution:
       {
@@ -4864,10 +4872,10 @@ packages:
       package-json: 10.0.1
     dev: true
 
-  /lavy@2.0.2(eslint@9.39.1)(stylelint@16.25.0):
+  /lavy@2.0.3(eslint@9.39.1)(stylelint@16.25.0):
     resolution:
       {
-        integrity: sha512-MR9l9v7+ANybsUdAoeQ2kzU37IA+E5zOuL+6D969LJuZ/m0yIOGCrLqwg5/aLkMfYyeRwqrBqpzdo9jFZGi1dw==,
+        integrity: sha512-GYX5mYRo2Svm9V6GvtI0mSd8HHeQZuQjwwHIlNws4Xcn3XeGx+G61BcbGZqHjTjokKqD7agk+RC5L3DTuGusEA==,
       }
     engines: { node: '>=18' }
     hasBin: true
@@ -6660,23 +6668,26 @@ packages:
       }
     dev: true
 
-  /swiftlet@1.0.0-Alpha.4(typescript@5.9.3):
+  /swiftlet@1.1.0(typescript@5.9.3):
     resolution:
       {
-        integrity: sha512-lMaiTD980p7+rTxjEXLLCh8+G6/sLOclD5cDvpKuRWfAIphQ5vvBito0LPlMMhRwwc2OMuxhuK6thlwnS3Ke6A==,
+        integrity: sha512-tDA706IEv1FfDmJLd7inxa+cHfrDs1gLFhJNzMw47RwHmUkH71yO79kHRwMwyEre1GPCMQ+oiX+BlxXAO6NI6A==,
       }
-    engines: { node: '>=17.0.0' }
+    engines: { node: '>=18.0.0' }
     hasBin: true
     dependencies:
       '@rollup/plugin-terser': 0.4.4(rollup@4.53.2)
       '@rollup/plugin-typescript': 11.1.6(rollup@4.53.2)(typescript@5.9.3)
+      boxen: 8.0.1
+      cac: 6.7.14
       chalk: 4.1.2
       commander: 11.1.0
       fs-extra: 11.3.2
+      jiti: 1.21.7
+      ora: 5.4.1
       rollup: 4.53.2
       rollup-plugin-dts: 6.2.3(rollup@4.53.2)(typescript@5.9.3)
       tapable: 2.3.0
-      ts-copilot: 1.0.0-Beta
     transitivePeerDependencies:
       - tslib
       - typescript
@@ -6763,13 +6774,6 @@ packages:
       typescript: '>=4.8.4'
     dependencies:
       typescript: 5.9.3
-    dev: true
-
-  /ts-copilot@1.0.0-Beta:
-    resolution:
-      {
-        integrity: sha512-qXHdgfMaYa0/JurHGvl/oI1NPLR47yaIqkFIrG5XnmBwnCyfPetJVsi2nqECf6OhgtWfauR3dSkys36apZt+qw==,
-      }
     dev: true
 
   /tsconfig-paths@3.15.0:
