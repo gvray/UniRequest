@@ -1,14 +1,27 @@
 import { axiosAdapter, AxiosInstance } from '@/adapters';
-import { IRequestOptions, RequestConfig } from '@/types';
+import {
+  ErrorConfig,
+  IRequestInterceptorTuple,
+  IRequestOptions,
+  IResponseInterceptorTuple,
+  RequestConfig,
+} from '@/types';
 
 class RequestClient {
   constructor(options: RequestConfig) {
-    this.config = options;
-    this.getRequestInstance(options);
+    const { errorConfig, requestInterceptors, responseInterceptors, ...rest } = options;
+    this.errorConfig = errorConfig || null;
+    this.requestInterceptors = requestInterceptors || null;
+    this.responseInterceptors = responseInterceptors || null;
+    this.requestConfig = rest;
+    this.getRequestInstance(this.requestConfig || rest);
   }
   static requestClient: RequestClient | null = null;
   private requestInstance: AxiosInstance | null = null;
-  private config: RequestConfig;
+  private requestConfig: RequestConfig;
+  private errorConfig: ErrorConfig | null = null;
+  private requestInterceptors: IRequestInterceptorTuple[] | null = null;
+  private responseInterceptors: IResponseInterceptorTuple[] | null = null;
 
   static getRequestClient(options: RequestConfig) {
     if (RequestClient.requestClient) return RequestClient.requestClient;
@@ -18,7 +31,7 @@ class RequestClient {
   private getRequestInstance(config: RequestConfig) {
     this.requestInstance = axiosAdapter.create(config);
 
-    config?.requestInterceptors?.forEach((interceptor: any) => {
+    this.requestInterceptors?.forEach((interceptor: any) => {
       if (Array.isArray(interceptor)) {
         this.requestInstance?.interceptors.request.use(async (config: any) => {
           const { url } = config;
@@ -40,7 +53,7 @@ class RequestClient {
       }
     });
 
-    config?.responseInterceptors?.forEach((interceptor: any) => {
+    this.responseInterceptors?.forEach((interceptor: any) => {
       if (Array.isArray(interceptor)) {
         this.requestInstance?.interceptors.response.use(interceptor[0], interceptor[1]);
       } else {
@@ -117,7 +130,7 @@ class RequestClient {
             requestInstance.interceptors.response.eject(interceptor);
           });
           try {
-            const handler = this.config?.errorConfig?.errorHandler;
+            const handler = this.errorConfig?.errorHandler;
             if (handler) {
               handler(error, opts as IRequestOptions);
             }
