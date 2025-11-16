@@ -1,9 +1,20 @@
 {
-  "name": "UniRequest",
-  "version": "1.0.0",
+  "name": "unirequest",
+  "version": "1.0.0.alpha",
   "description": "Universal Request Standard for Modern Web and Multi-Platform Apps",
   "type": "module",
-  "main": "index.js",
+  "main": "dist/unirequest.cjs.js",
+  "module": "dist/unirequest.esm.js",
+  "types": "dist/unirequest.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/unirequest.esm.js",
+      "require": "./dist/unirequest.cjs.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "prepare": "husky install",
@@ -14,7 +25,8 @@
     "type-check": "tsc --noEmit",
     "commit:check": "lavy commit --test",
     "commit:config": "lavy commit --config",
-    "demo": "tsx example/node/example.ts"
+    "demo": "tsx example/node/example.ts",
+    "build": "swiftlet build"
   },
   "keywords": [],
   "author": "Gavin",
