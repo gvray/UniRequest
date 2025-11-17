@@ -7,4 +7,7 @@ export default defineConfig({
   globalName: 'UniRequest',
   external: ['axios'],
   sourcemap: true,
+  globals: {
+    axios: 'axios',
+  },
 });
