@@ -9,6 +9,6 @@
       "@/*": ["src/*"]
     }
   },
-  "include": ["src/**/*", "swiftlet.config.ts", "examples/**/*"],
+  "include": ["src/**/*", "swiftlet.config.ts"],
   "exclude": ["node_modules", "dist"]
 }

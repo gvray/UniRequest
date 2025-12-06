@@ -9,6 +9,13 @@ import {
   RequestOptions,
 } from '../types';
 import { wrapInterceptor } from './interceptor';
+import {
+  bearerAuth,
+  jsonContentType,
+  acceptLanguage,
+  withCredentials,
+  createAuthRefreshInterceptor,
+} from '../interceptor';
 
 class RequestClient {
   constructor(options: RequestConfig) {
@@ -33,6 +40,37 @@ class RequestClient {
   }
   private getRequestInstance(config: RuntimeRequestConfig) {
     this.requestInstance = axiosAdapter.create(config);
+
+    // Auto register built-in interceptors from features (request-level)
+    const features = (this.requestOptions as any)?.features;
+    const builtinRequestInterceptors: IRequestInterceptorTuple[] = [];
+    const builtinResponseInterceptors: IResponseInterceptorTuple[] = [];
+
+    if (features?.bearerAuth) {
+      const { getToken, header, scheme, exclude } = features.bearerAuth;
+      builtinRequestInterceptors.push(bearerAuth(getToken, header, scheme, exclude));
+    }
+    if (features?.jsonContentType) {
+      builtinRequestInterceptors.push(jsonContentType());
+    }
+    if (features?.acceptLanguage) {
+      const { getLocale, header } = features.acceptLanguage;
+      builtinRequestInterceptors.push(acceptLanguage(getLocale, header));
+    }
+    if (features?.withCredentials) {
+      builtinRequestInterceptors.push(withCredentials());
+    }
+    if (features?.authRefresh) {
+      builtinResponseInterceptors.push(createAuthRefreshInterceptor(features.authRefresh));
+    }
+
+    // register builtin first, then user interceptors (user can override behaviors by ordering)
+    builtinRequestInterceptors.forEach((interceptor) => {
+      this.requestInstance?.interceptors.request.use(wrapInterceptor(interceptor as any));
+    });
+    builtinResponseInterceptors.forEach((interceptor) => {
+      this.requestInstance?.interceptors.response.use(interceptor as any);
+    });
 
     this.requestInterceptors?.forEach((interceptor) => {
       if (Array.isArray(interceptor)) {

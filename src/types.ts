@@ -6,11 +6,36 @@ export interface IErrorHandler {
   (error: RequestError, opts: IRequestOptions, feedBack?: (errorInfo: ErrorFeedInfo) => void): void;
 }
 
+export interface BuiltinFeatures {
+  bearerAuth?: {
+    getToken: () => WithPromise<string | null | undefined>;
+    header?: string;
+    scheme?: string;
+    exclude?: Array<string | RegExp> | ((url?: string, options?: IRequestOptions) => boolean);
+  };
+  acceptLanguage?: {
+    getLocale: () => WithPromise<string | null | undefined>;
+    header?: string;
+  };
+  jsonContentType?: boolean;
+  withCredentials?: boolean;
+  authRefresh?: {
+    refreshToken: () => Promise<string | null | undefined>;
+    setToken?: (token: string) => Promise<void> | void;
+    getToken?: () => Promise<string | null | undefined>;
+    statuses?: number[];
+    loginRedirect?: () => void;
+    header?: string;
+    scheme?: string;
+  };
+}
+
 // 创建期配置（客户端级）
 export interface ClientConfig<T = any> extends AxiosRequestConfig {
   errorConfig?: ErrorConfig<T>;
   requestInterceptors?: IRequestInterceptorTuple[];
   responseInterceptors?: IResponseInterceptorTuple[];
+  features?: BuiltinFeatures;
 }
 
 export type RequestConfig<T = any> = ClientConfig<T>;
@@ -26,6 +51,8 @@ export interface IRequestOptions extends RuntimeRequestConfig {
   getResponse?: boolean;
   requestInterceptors?: IRequestInterceptorTuple[];
   responseInterceptors?: IResponseInterceptorTuple[];
+  // 控制本次请求是否跳过 Authorization 注入（如登录接口等）
+  skipAuth?: boolean;
 }
 
 export type RequestOptions = IRequestOptions;
@@ -83,7 +110,7 @@ export interface ErrorConfig<T = any> {
   errorThrower?: (res: T) => void;
   errorFeedBack?: ErrorFeedBack;
 }
-export type IErrorInterceptor = (error: AxiosError) => WithPromise<AxiosError>;
+export type IErrorInterceptor = (error: AxiosError) => WithPromise<AxiosError | AxiosResponse>;
 export type IResponseInterceptor = <T = any>(
   response: AxiosResponse<T>
 ) => WithPromise<AxiosResponse<T>>;
@@ -96,6 +123,12 @@ export type IResponseInterceptorTuple =
   | [IResponseInterceptor, IErrorInterceptor]
   | [IResponseInterceptor]
   | IResponseInterceptor;
+
+export type RequestResult<T = any> = {
+  data?: T;
+  error?: any;
+  response?: AxiosResponse<T>;
+};
 
 export interface HttpAdapter {
   request<T = any>(options: RequestOptions): Promise<T>;
