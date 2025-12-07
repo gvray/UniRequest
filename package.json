@@ -6,6 +6,7 @@
   "main": "dist/unirequest.cjs.js",
   "module": "dist/unirequest.esm.js",
   "types": "dist/unirequest.d.ts",
+  "unpkg": "dist/unirequest.min.js",
   "exports": {
     ".": {
       "import": "./dist/unirequest.esm.js",
@@ -32,7 +33,8 @@
     "examples:backend": "pnpm -C examples/backend dev",
     "examples:frontend": "pnpm -C examples/frontend dev",
     "examples:nextjs": "pnpm -C examples/nextjs dev",
-    "examples:node": "pnpm -C examples/node dev"
+    "examples:node": "pnpm -C examples/node dev",
+    "prepublish": "pnpm build"
   },
   "keywords": [],
   "author": "Gavin",

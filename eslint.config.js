@@ -1,4 +1,4 @@
-import { defineConfig } from 'eslint/config'
+import { defineConfig, globalIgnores} from 'eslint/config'
 
 import tsConfig from 'eslint-config-lavy/ts'
 
@@ -9,5 +9,6 @@ export default defineConfig([
     rules: {
       // You can add project-specific rules here.
     }
-  }
+  },
+  globalIgnores(["examples/**"]),
 ])
